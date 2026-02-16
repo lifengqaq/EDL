@@ -1,0 +1,205 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dg="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls.DataGrid"
+        x:Class="lfEDL.Avalonia.MainWindow"
+        Width="1400" Height="920"
+        Title="lfEDL Qualcomm">
+  <Grid RowDefinitions="Auto,*,Auto,Auto,160" Margin="12">
+    <!-- Row 0: Title bar with status -->
+    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+      <TextBlock Text="lfEDL Qualcomm" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" />
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <TextBlock Text="状态:" VerticalAlignment="Center" />
+          <TextBlock x:Name="StatusText" VerticalAlignment="Center" />
+        </StackPanel>
+        <TextBlock x:Name="SpeedText" VerticalAlignment="Center" Foreground="Gray" />
+        <TextBlock x:Name="TimerText" VerticalAlignment="Center" Foreground="Gray" />
+        <TextBlock x:Name="SelectedPartitionText" VerticalAlignment="Center" Foreground="Gray" />
+      </StackPanel>
+    </Grid>
+
+    <!-- Row 1: Main content area -->
+    <Grid Grid.Row="1" ColumnDefinitions="*,420" ColumnSpacing="12" Margin="0,8,0,0">
+      <!-- Left: Partition grid with controls -->
+      <Grid RowDefinitions="Auto,Auto,*" RowSpacing="8">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBox x:Name="PartitionSearchBox" Width="200" Watermark="搜索分区" />
+          <TextBlock Text="读取输出" VerticalAlignment="Center" Margin="8,0,0,0" />
+          <TextBox x:Name="ReadOutputPathBox" Width="200" />
+          <Button x:Name="BrowseReadOutputButton" Content="选择" Width="60" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+          <TextBlock Text="写入文件" VerticalAlignment="Center" />
+          <TextBox x:Name="WriteFilePathBox" Width="200" />
+          <Button x:Name="BrowseWriteFileButton" Content="选择" Width="60" />
+          <Button x:Name="ReadPartitionButton" Content="读取分区" Width="80" />
+          <Button x:Name="WritePartitionButton" Content="写入分区" Width="80" />
+          <Button x:Name="ErasePartitionButton" Content="擦除分区" Width="80" />
+          <CheckBox x:Name="GenerateXmlCheckBox" Content="生成XML" VerticalAlignment="Center" />
+          <CheckBox x:Name="AutoRebootCheckBox" Content="写入后重启" VerticalAlignment="Center" />
+        </StackPanel>
+        <dg:DataGrid Grid.Row="2" x:Name="PartitionsGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                     SelectionMode="Extended" CanUserReorderColumns="True" CanUserResizeColumns="True">
+          <dg:DataGrid.Styles>
+            <Style Selector="dg|DataGridColumnHeader">
+              <Setter Property="HorizontalContentAlignment" Value="Center" />
+            </Style>
+          </dg:DataGrid.Styles>
+          <dg:DataGrid.Columns>
+            <dg:DataGridCheckBoxColumn Binding="{Binding IsSelected}" Width="60" IsReadOnly="False" CanUserSort="False" />
+            <dg:DataGridTextColumn Header="LUN" Binding="{Binding Lun}" Width="65" />
+            <dg:DataGridTextColumn Header="分区" Binding="{Binding Name}" Width="150" />
+            <dg:DataGridTextColumn Header="大小" Binding="{Binding FormattedSize}" Width="100" CanUserSort="False" />
+            <dg:DataGridTextColumn Header="起始" Binding="{Binding StartSector}" Width="110" CanUserSort="False" />
+            <dg:DataGridTextColumn Header="扇区数" Binding="{Binding NumSectors}" Width="110" CanUserSort="False" />
+            <dg:DataGridTextColumn Header="文件" Binding="{Binding CustomFileName}" Width="200" CanUserSort="False" />
+            <dg:DataGridTextColumn Header="位置" Binding="{Binding Location}" Width="*" CanUserSort="False" />
+          </dg:DataGrid.Columns>
+        </dg:DataGrid>
+      </Grid>
+
+      <!-- Right: Function panels + large progress -->
+      <Grid Grid.Column="1" RowDefinitions="*,Auto">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                      Background="Transparent" Padding="0" Margin="0">
+          <StackPanel Spacing="12">
+            <!-- Connection Panel -->
+            <Border CornerRadius="8" BorderThickness="1" Padding="10">
+              <StackPanel Spacing="8">
+                <TextBlock Text="连接" FontWeight="SemiBold" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <ComboBox x:Name="PortComboBox" Width="200" />
+                  <Button x:Name="RefreshPortsButton" Content="刷新" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <TextBlock Text="存储" VerticalAlignment="Center" />
+                  <ComboBox x:Name="StorageComboBox" Width="100" />
+                  <TextBlock Text="认证" VerticalAlignment="Center" />
+                  <ComboBox x:Name="AuthModeComboBox" Width="120" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <TextBox x:Name="ProgrammerPathBox" Width="250" Watermark="Programmer/Loader" />
+                  <Button x:Name="BrowseProgrammerButton" Content="选择" Width="70" />
+                </StackPanel>
+                <StackPanel x:Name="VipAuthPanel" Spacing="8">
+                  <StackPanel x:Name="DigestRow" Orientation="Horizontal" Spacing="8">
+                    <TextBox x:Name="DigestPathBox" Width="250" Watermark="Digest 文件" />
+                    <Button x:Name="BrowseDigestButton" Content="选择" Width="70" />
+                  </StackPanel>
+                  <StackPanel x:Name="SignatureRow" Orientation="Horizontal" Spacing="8">
+                    <TextBox x:Name="SignaturePathBox" Width="250" Watermark="Signature 文件" />
+                    <Button x:Name="BrowseSignatureButton" Content="选择" Width="70" />
+                  </StackPanel>
+                  <StackPanel x:Name="ChimeraRow" Orientation="Horizontal" Spacing="8">
+                    <TextBox x:Name="ChimeraPlatformBox" Width="250" Watermark="请输入平台代号 留空自动获取" />
+                  </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                  <CheckBox x:Name="SkipSaharaCheckBox" Content="跳过引导" />
+                  <CheckBox x:Name="ProtectPartitionsCheckBox" Content="保护 LUN5" IsChecked="True" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Button x:Name="ReadGptButton" Content="连接&amp;读取GPT" Width="125" />
+                  <Button x:Name="DisconnectButton" Content="断开" Width="80" />
+                  <Button x:Name="QuickReconnectButton" Content="快速重连" Width="90" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Button x:Name="ResetSaharaButton" Content="重置 Sahara" Width="110" />
+                  <Button x:Name="HardResetButton" Content="硬重置设备" Width="110" />
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Device Info Panel -->
+            <Border CornerRadius="8" BorderThickness="1" Padding="10">
+              <StackPanel Spacing="8">
+                <TextBlock Text="设备信息" FontWeight="SemiBold" />
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                      ColumnDefinitions="70,*" ColumnSpacing="8" RowSpacing="4">
+                  <TextBlock Text="品牌" />
+                  <TextBlock Grid.Column="1" x:Name="DeviceBrandText" />
+                  <TextBlock Grid.Row="1" Text="芯片" />
+                  <TextBlock Grid.Row="1" Grid.Column="1" x:Name="DeviceChipText" />
+                  <TextBlock Grid.Row="2" Text="序列号" />
+                  <TextBlock Grid.Row="2" Grid.Column="1" x:Name="DeviceSerialText" />
+                  <TextBlock Grid.Row="3" Text="存储" />
+                  <TextBlock Grid.Row="3" Grid.Column="1" x:Name="DeviceStorageText" />
+                  <TextBlock Grid.Row="4" Text="槽位" />
+                  <TextBlock Grid.Row="4" Grid.Column="1" x:Name="DeviceSlotText" />
+                  <TextBlock Grid.Row="5" Text="型号" />
+                  <TextBlock Grid.Row="5" Grid.Column="1" x:Name="DeviceModelText" />
+                  <TextBlock Grid.Row="6" Text="Android" />
+                  <TextBlock Grid.Row="6" Grid.Column="1" x:Name="DeviceAndroidText" />
+                  <TextBlock Grid.Row="7" Text="安全补丁" />
+                  <TextBlock Grid.Row="7" Grid.Column="1" x:Name="DeviceSecurityText" />
+                  <TextBlock Grid.Row="8" Text="代号" />
+                  <TextBlock Grid.Row="8" Grid.Column="1" x:Name="DeviceCodenameText" />
+                </Grid>
+              </StackPanel>
+            </Border>
+
+            <!-- Advanced Ops Panel -->
+            <Border CornerRadius="8" BorderThickness="1" Padding="10">
+              <StackPanel Spacing="8">
+                <TextBlock Text="高级操作" FontWeight="SemiBold" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Button x:Name="RebootSystemButton" Content="重启系统" Width="90" />
+                  <Button x:Name="RebootEdlButton" Content="重启 EDL" Width="90" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <ComboBox x:Name="SwitchSlotComboBox" Width="80" />
+                  <Button x:Name="SwitchSlotButton" Content="切换槽位" Width="90" />
+                  <TextBox x:Name="BootLunBox" Width="60" Watermark="LUN" />
+                  <Button x:Name="BootLunButton" Content="激活 LUN" Width="90" />
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Flash Panel -->
+            <Border CornerRadius="8" BorderThickness="1" Padding="10">
+              <StackPanel Spacing="8">
+                <TextBlock Text="刷机" FontWeight="SemiBold" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <TextBox x:Name="RawprogramPathBox" Width="240" Watermark="Rawprogram XML (可多选)" />
+                  <Button x:Name="BrowseRawprogramButton" Content="选择" Width="70" />
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                  <Button x:Name="FlashSelectedButton" Content="批量刷写选中" Width="120" />
+                  <Button x:Name="CancelOperationButton" Content="停止" Width="80" />
+                  <CheckBox x:Name="MetaSuperCheckBox" Content="MetaSuper" VerticalAlignment="Center" />
+                </StackPanel>
+                <TextBox x:Name="FlashInfoBox" AcceptsReturn="True" IsReadOnly="True" Height="100"
+                         VerticalContentAlignment="Top" Padding="5" TextWrapping="Wrap"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto" />
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </ScrollViewer>
+
+        <!-- Large progress bar (total progress) below panels -->
+        <Grid Grid.Row="1" Margin="0,8,0,0" Height="32">
+          <ProgressBar x:Name="TotalProgress" Minimum="0" Maximum="100" />
+          <TextBlock x:Name="TotalProgressText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" />
+        </Grid>
+      </Grid>
+    </Grid>
+
+    <!-- Row 2: Small progress bar (sub/single partition progress, full width) -->
+    <Grid Grid.Row="2" Margin="0,8,0,0" Height="28">
+      <ProgressBar x:Name="SubProgress" Minimum="0" Maximum="100" />
+      <TextBlock x:Name="SubProgressText" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" />
+    </Grid>
+
+    <!-- Row 3: separator -->
+    <Separator Grid.Row="3" Margin="0,4,0,0" />
+
+    <!-- Row 4: Log output area -->
+    <TextBox Grid.Row="4" x:Name="LogBox" AcceptsReturn="True" IsReadOnly="True"
+             VerticalContentAlignment="Top" VerticalAlignment="Stretch"
+             ScrollViewer.VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="12"
+             Padding="6" Margin="0,4,0,0" />
+  </Grid>
+</Window>
+

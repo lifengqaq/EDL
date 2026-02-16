@@ -1,0 +1,13 @@
+[Bb]in/
+[Oo]bj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.userprefs
+*.sln.docstates
+*.lock.json
+*.ide
+*.log
+*.tmp
+TestResults/

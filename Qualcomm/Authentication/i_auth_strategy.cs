@@ -1,4 +1,4 @@
-﻿// ============================================================================
+// ============================================================================
 // lfEDL - Auth Strategy Interface | 认证策略接口
 // ============================================================================
 // [ZH] 认证策略接口 - 处理不同厂商的特殊认证逻辑
@@ -37,4 +37,3 @@ namespace lfEDL.Qualcomm.Authentication
         Task<bool> AuthenticateAsync(FirehoseClient client, string programmerPath, CancellationToken ct = default(CancellationToken));
     }
 }
-

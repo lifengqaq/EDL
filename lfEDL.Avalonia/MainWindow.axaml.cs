@@ -146,6 +146,17 @@ namespace lfEDL.Avalonia
             _cancelBtn.Click += (s, e) => { _cts?.Cancel(); AppendLog("操作已取消"); };
             _rebootSysBtn.Click += async (s, e) => await RebootSystemAsync();
             _rebootEdlBtn.Click += async (s, e) => await RebootEdlAsync();
+            // [测试按钮] 取消注释可在无设备时预览小米认证弹窗
+            // var testXiaomiBtn = this.FindControl<Button>("TestXiaomiAuthButton");
+            // if (testXiaomiBtn != null) testXiaomiBtn.Click += async (s, e) =>
+            // {
+            //     string sampleBlob = "VQAAAAEAAQAAAAAAAAAAAAIAAAAAAAAACgAAAAAAAAAAAAAAAAAAAA" +
+            //         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
+            //         "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==";
+            //     var dlg = new Dialogs.XiaomiAuthDialog(sampleBlob);
+            //     var result = await dlg.ShowDialog<string>(this);
+            //     AppendLog(string.IsNullOrEmpty(result) ? "[测试] 用户取消了认证" : $"[测试] 用户输入签名: {result.Substring(0, System.Math.Min(30, result.Length))}...");
+            // };
             _switchSlotBtn.Click += async (s, e) => await SwitchSlotAsync();
             _bootLunBtn.Click += async (s, e) => await BootLunAsync();
 

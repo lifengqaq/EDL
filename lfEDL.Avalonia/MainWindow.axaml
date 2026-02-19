@@ -146,6 +146,7 @@
                 <StackPanel Orientation="Horizontal" Spacing="8">
                   <Button x:Name="RebootSystemButton" Content="重启系统" Width="90" />
                   <Button x:Name="RebootEdlButton" Content="重启 EDL" Width="90" />
+                  <!-- <Button x:Name="TestXiaomiAuthButton" Content="测试小米认证" Width="120" /> -->
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="8">
                   <ComboBox x:Name="SwitchSlotComboBox" Width="80" />

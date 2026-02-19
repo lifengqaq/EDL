@@ -1,4 +1,4 @@
-﻿// ============================================================================
+// ============================================================================
 // lfEDL - Cloud Loader Service | 云端 Loader 服务
 // ============================================================================
 // [ZH] 云端 Loader 服务 - 自动匹配和下载高通 Loader
@@ -47,7 +47,7 @@ namespace lfEDL.Qualcomm.Services
         #region Configuration
         
         // 当前使用的 API 地址
-        public string ApiBase { get; set; } = "https://api.lfEDL.org/api";
+        public string ApiBase { get; set; } = "https://api.sakuraedl.org/api";
         
         // 本地缓存目录
         public string CacheDirectory { get; set; }
@@ -991,4 +991,3 @@ namespace lfEDL.Qualcomm.Services
     
     #endregion
 }
-

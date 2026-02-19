@@ -1,4 +1,4 @@
-﻿// ============================================================================
+// ============================================================================
 // lfEDL - 驱动下载服务
 // Driver Download Service
 // ============================================================================
@@ -41,7 +41,7 @@ namespace lfEDL.Common
     public class DriverDownloadService
     {
         // 云端驱动下载地址 (主域名)
-        private const string BASE_URL = "https://lfEDL.org";
+        private const string BASE_URL = "https://sakuraedl.org";
         
         private static readonly string[] QualcommDriverUrls = {
             $"{BASE_URL}/downloads/qualcomm/qc_driver.exe"
@@ -392,4 +392,3 @@ namespace lfEDL.Common
         }
     }
 }
-

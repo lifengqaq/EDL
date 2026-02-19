@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using Avalonia;
 using Avalonia.Win32;
@@ -34,4 +34,3 @@ namespace lfEDL.Avalonia
         }
     }
 }
-

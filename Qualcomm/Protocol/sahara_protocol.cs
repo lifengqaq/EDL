@@ -663,7 +663,9 @@ namespace lfEDL.Qualcomm.Protocol
                     }
                     else
                     {
-                        int currentTimeout = (loopGuard == 1) ? READ_TIMEOUT_MS * 2 : READ_TIMEOUT_MS;
+                        // 优化：首次读取 Hello 包超时时间缩短为 2 秒
+                        // 如果设备未就绪或已死机，快速失败并触发重置逻辑，而不是等待 60 秒
+                        int currentTimeout = (loopGuard == 1) ? 2000 : READ_TIMEOUT_MS;
                         header = await ReadBytesAsync(8, currentTimeout, ct);
                     }
 

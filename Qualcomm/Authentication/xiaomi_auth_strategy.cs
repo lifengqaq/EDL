@@ -81,6 +81,13 @@ namespace lfEDL.Qualcomm.Authentication
 
                     if (sigResp == null || sigResp.Contains("NAK"))
                     {
+                        // 检查是否需要 blob init first (新设备/新Loader特性)
+                        if (sigResp != null && sigResp.Contains("Blob should init first"))
+                        {
+                            _log("[MiAuth] 设备提示需先请求 Blob (Blob should init first)，跳过静态签名尝试...");
+                            break; // 退出循环，进入下方的 GetAuthTokenAsync 流程
+                        }
+
                         index++;
                         continue;
                     }
